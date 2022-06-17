@@ -1,2 +1,5 @@
 django
 django-heroku
+pillow
+psycopg2-binary
+gunicorn
