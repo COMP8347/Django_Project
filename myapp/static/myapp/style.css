@@ -1,0 +1,13 @@
+h1 {
+    color: black;
+    font-size: 48px;
+    background-color: teal;
+    font-style: oblique;
+    position: center;
+
+    border-color: white;
+}
+.hbar1 {
+    display: inline;
+    margin: 15px;
+}

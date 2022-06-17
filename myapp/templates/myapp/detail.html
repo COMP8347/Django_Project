@@ -1,0 +1,16 @@
+{% extends 'myapp/base.html' %}
+{% block body_block %}
+<p>
+    The Topic name found is:
+    {{ course.first.topic.name }}
+    <br><br>
+    With Category:
+    {{ course.first.topic.category }}
+</p>
+<p>The Course List is as follows - </p>
+<ul>
+    {% for item in course %}
+     <li> {{ item.name}} </li>
+     {% endfor %}
+</ul>
+{% endblock %}
