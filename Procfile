@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn mywebapps22
+web: gunicorn myapp
