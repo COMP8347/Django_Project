@@ -23,6 +23,9 @@ class Course(models.Model):
     def __str__(self):
         return self.name + ' - Course Name'  + ' | Topic Name: ' + self.topic.name + ' | Description: ' + self.description
 
+    def discount(self):
+        price = self.price*0.9
+
 class Student(User):
     CITY_CHOICES = [('WS', 'Windsor'),
     ('CG', 'Calgery'),

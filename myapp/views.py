@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from .models import Topic, Course, Student, Order
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
+
+
 # Create your views here.
 
 
@@ -17,7 +19,12 @@ def about(request):
 
 def detail(request, top_no):
     course = Course.objects.filter(topic__id__contains=top_no)
-    if(len(course) > 0):
+    if (len(course) > 0):
         return render(request, 'myapp/detail.html', {'course': course})
     else:
         return get_object_or_404(Course, topic_id=top_no)
+
+
+def courses(request):
+    courlist = Course.objects.all().order_by('id')
+    return render(request, 'myapp/courses.html', {'courlist': courlist})
