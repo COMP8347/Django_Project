@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-oz593qluk($0w!fk7v_3+0hgel0)h&e*ggcvto7(w-eld8sxkl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['pure-reef-07015.herokuapp.com']
+ALLOWED_HOSTS = ['pure-reef-07015.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
@@ -76,18 +76,18 @@ WSGI_APPLICATION = 'mywebappS22.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'web_default': {
+    'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    },
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd6i4dmf8f1g9f4',
-        'USER': 'swdciskkdyfhrl',
-        'PASSWORD': 'bbfcadcf59e94450f259314fb3aea40a3fef9fd51d623f11ac33add1c3fc8124',
-        'HOST': 'ec2-54-147-33-38.compute-1.amazonaws.com',
-        'PORT': '5432'
     }
+    # ,'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'd6i4dmf8f1g9f4',
+    #     'USER': 'swdciskkdyfhrl',
+    #     'PASSWORD': 'bbfcadcf59e94450f259314fb3aea40a3fef9fd51d623f11ac33add1c3fc8124',
+    #     'HOST': 'ec2-54-147-33-38.compute-1.amazonaws.com',
+    #     'PORT': '5432'
+    # }
 }
 
 
