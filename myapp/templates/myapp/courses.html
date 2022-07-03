@@ -3,8 +3,8 @@
 <p>The Course List is as follows - </p>
 <ul>
     {% for item in courlist %}
-    <li> {{ item.name}} </li>
+        <li><i><a href={% url 'myapp:index' %}courses/{{ item.id }}> {{ item.name}}</a></i> </li>
     {% endfor %}
 </ul>
-    <li class="hbar1"><a href="/myapp/place_order/">Click here to place order</a><br /></li>
+    <li class="hbar1"><a href="{% url 'myapp:index' %}place_order">Click here to place order</a><br /></li>
 {% endblock %}

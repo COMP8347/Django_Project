@@ -1,3 +1,5 @@
+import decimal
+
 from django.db import models
 import datetime
 from django.contrib.auth.models import User
@@ -24,7 +26,7 @@ class Course(models.Model):
         return self.name + ' - Course Name'  + ' | Topic Name: ' + self.topic.name + ' | Description: ' + self.description
 
     def discount(self):
-        price = self.price*0.9
+        self.price = self.price * decimal.Decimal(0.9)
 
 class Student(User):
     CITY_CHOICES = [('WS', 'Windsor'),
@@ -36,7 +38,7 @@ class Student(User):
     interested_in = models.ManyToManyField(Topic)
 
     def __str__(self):
-        return self.first_name + ' ' + self.last_name + ' ,School ' + self.school + ', City ' + self.city
+        return self.first_name + ' ' + self.last_name #+ ' ,School ' + self.school + ', City ' + self.city
 
 class Order(models.Model):
     VALID_CHOICES = [
