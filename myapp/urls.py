@@ -8,6 +8,8 @@ urlpatterns = [
     path(r'place_order/', views.place_order),
     path(r'login/', views.user_login),
     path(r'logout/', views.user_logout),
+    path(r'myaccount/', views.myaccount),
+
     path(r'courses/<int:cour_id>', views.coursedetail),
     path(r'<int:top_no>/', views.detail),
 ]

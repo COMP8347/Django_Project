@@ -2,7 +2,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
-from .forms import OrderForm, InterestForm
+from .forms import OrderForm, InterestForm, LoginForm
 from .models import Topic, Course, Student, Order
 from django.shortcuts import get_object_or_404, redirect
 from django.shortcuts import render
@@ -82,28 +82,50 @@ def coursedetail(request, cour_id):
         form = InterestForm()
     return render(request, 'myapp/coursedetail.html', {'form': form, 'cour': cour})
 
+
 def user_login(request):
     if request.method == 'POST':
-        print(request.POST)
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user:
-            if user.is_active:
-                login(request, user)
-                return HttpResponseRedirect(reverse('myapp:index'))
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user:
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponseRedirect(reverse('myapp:index'))
+                else:
+                    return HttpResponse('Your account is disabled.')
             else:
-                return HttpResponse('Your account is disabled.')
-        else:
-            return HttpResponse('Invalid login details.')
+                return HttpResponse('Invalid login details.')
     else:
-        return render(request, 'myapp/login.html')
+        form = LoginForm()
+        return render(request, 'myapp/login.html', {'form': form})
+
 
 @login_required
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse(('myapp:index')))
 
+
 def myaccount(request):
-    user
-    # Student = Student.objects.filter
+    current_user = request.user
+    if current_user.is_superuser == False:
+        user_is_student=True
+        msg ='Student'
+        if current_user.id == None:
+            print('None here')
+            return redirect('../../myapp/login')
+        else:
+            student = Student.objects.filter(id=current_user.id).get()
+            orders = Order.objects.filter(student__id = current_user.id).all()
+            interested_in_topics = Topic.objects.filter(student__id=current_user.id).all()
+            # print(interested_in_topics, len(interested_in_topics))
+    else:
+        msg = 'You are not a registered student!'
+        student=[]
+        orders=[]
+        interested_in_topics=[]
+        user_is_student = False
+    return render(request, 'myapp/myaccount.html', {'user': student, 'orders': orders, 'interested_in_topics': interested_in_topics, 'msg': msg, 'user_is_student': user_is_student})

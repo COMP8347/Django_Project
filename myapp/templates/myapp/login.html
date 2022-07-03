@@ -3,10 +3,11 @@
 <p>
     <form method="post" action="">
     {% csrf_token %}
-        <input id="username">
-        <input id="password">
+        <table>
+            {{ form.as_table }}
+        </table>
     <input type="submit" value="Login"/>
     </form>
+
 </p>
-    <li class="hbar1"><a href="{% url 'myapp:index' %}place_order">Click here to place order</a><br /></li>
 {% endblock %}

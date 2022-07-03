@@ -24,3 +24,8 @@ class OrderForm(forms.ModelForm):
             'order_date': forms.SelectDateWidget
         }
 
+
+class LoginForm(forms.Form):
+    username = forms.CharField(required=True)
+    password = forms.CharField(required=True, widget=forms.PasswordInput)
+
