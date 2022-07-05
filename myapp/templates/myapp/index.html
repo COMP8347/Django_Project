@@ -1,5 +1,15 @@
 {% extends 'myapp/base.html' %}
 {% block body_block %}
+    {% if dateTime_var_bool == True %}
+        <p>
+            Last Login @{{ dateTime_var }}
+        </p>
+        {% else %}
+        <p>
+            {{ dateTime_var }}
+        </p>
+    {% endif %}
+
 {% if top_list %}
 <h2>List of Topics</h2>
 <ol>

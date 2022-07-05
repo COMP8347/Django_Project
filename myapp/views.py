@@ -1,7 +1,12 @@
 # Import necessary classes
+from datetime import datetime
+
+from django.utils import timezone
+
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
+from . import models
 from .forms import OrderForm, InterestForm, LoginForm
 from .models import Topic, Course, Student, Order
 from django.shortcuts import get_object_or_404, redirect
@@ -15,12 +20,26 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
+    dateTime_var_check = request.session.get('last_login')
+    if dateTime_var_check is None:
+        dateTime_var = 'Your last login was more than one hour ago.'
+        dateTime_var_bool = False
+    else:
+        dateTime_var = dateTime_var_check
+        dateTime_var_bool = True
     top_list = Topic.objects.all().order_by('id')[:10]
-    return render(request, 'myapp/index.html', {'top_list': top_list})
+    return render(request, 'myapp/index.html', {'top_list': top_list, 'dateTime_var': dateTime_var, 'dateTime_var_bool': dateTime_var_bool})
 
 
 def about(request):
-    return render(request, 'myapp/about.html')
+    about_visits = request.COOKIES.get('about_visits')
+    response = HttpResponse(render(request, 'myapp/about.html'))
+    if about_visits is None:
+        response.set_cookie(key="about_visits", value=1, max_age="3000", expires="3000", path='/')
+    else:
+        response.set_cookie(key="about_visits", value=int(about_visits)+1, max_age="3000", expires="3000", path='/')
+        print(request.COOKIES.get('about_visits'))
+    return response
 
 
 def detail(request, top_no):
@@ -93,6 +112,11 @@ def user_login(request):
             if user:
                 if user.is_active:
                     login(request, user)
+                    dateTime_var = datetime.now()
+                    print(dateTime_var)
+                    # print(request.session.get('last_login', 'dateTime_var'))
+                    request.session['last_login'] = str(dateTime_var)
+                    # request.session.set_expiry(3600)
                     return HttpResponseRedirect(reverse('myapp:index'))
                 else:
                     return HttpResponse('Your account is disabled.')
@@ -103,10 +127,13 @@ def user_login(request):
         return render(request, 'myapp/login.html', {'form': form})
 
 
-@login_required
 def user_logout(request):
-    logout(request)
-    return HttpResponseRedirect(reverse(('myapp:index')))
+    current_user = request.user
+    if current_user.id is None:
+        return HttpResponseRedirect(reverse('myapp:index'))
+    else:
+        request.session.flush()
+        return HttpResponseRedirect(reverse('myapp:index'))
 
 
 def myaccount(request):
@@ -128,4 +155,10 @@ def myaccount(request):
         orders=[]
         interested_in_topics=[]
         user_is_student = False
-    return render(request, 'myapp/myaccount.html', {'user': student, 'orders': orders, 'interested_in_topics': interested_in_topics, 'msg': msg, 'user_is_student': user_is_student})
+    return render(request, 'myapp/myaccount.html', {
+        'user': student,
+        'orders': orders,
+        'interested_in_topics': interested_in_topics,
+        'msg': msg,
+        'user_is_student': user_is_student
+    })
